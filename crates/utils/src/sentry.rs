@@ -3,8 +3,8 @@ use std::sync::OnceLock;
 use sentry_tracing::{EventFilter, SentryLayer};
 use tracing::Level;
 
-const SENTRY_DSN_DEFAULT: &str = "https://1065a1d276a581316999a07d5dffee26@o4509603705192449.ingest.de.sentry.io/4509605576441937";
-const SENTRY_DSN_REMOTE: &str = "https://d6e4c45af2b081fadb10fb0ba726ccaf@o4509603705192449.ingest.de.sentry.io/4510305669283920";
+const SENTRY_DSN_DEFAULT: &str = "";
+const SENTRY_DSN_REMOTE: &str = "";
 
 static INIT_GUARD: OnceLock<sentry::ClientInitGuard> = OnceLock::new();
 

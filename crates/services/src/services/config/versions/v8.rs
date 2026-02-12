@@ -131,7 +131,7 @@ impl Default for Config {
             notifications: NotificationConfig::default(),
             editor: EditorConfig::default(),
             github: GitHubConfig::default(),
-            analytics_enabled: true,
+            analytics_enabled: false,
             workspace_dir: None,
             last_app_version: None,
             show_release_notes: false,

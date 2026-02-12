@@ -15,28 +15,7 @@ import { PostHogProvider } from 'posthog-js/react';
 // Import modal type definitions
 import './types/modals';
 
-import {
-  useLocation,
-  useNavigationType,
-  createRoutesFromChildren,
-  matchRoutes,
-} from 'react-router-dom';
-
-Sentry.init({
-  dsn: 'https://1065a1d276a581316999a07d5dffee26@o4509603705192449.ingest.de.sentry.io/4509605576441937',
-  tracesSampleRate: 1.0,
-  environment: import.meta.env.MODE === 'development' ? 'dev' : 'production',
-  integrations: [
-    Sentry.reactRouterV6BrowserTracingIntegration({
-      useEffect: React.useEffect,
-      useLocation,
-      useNavigationType,
-      createRoutesFromChildren,
-      matchRoutes,
-    }),
-  ],
-});
-Sentry.setTag('source', 'frontend');
+// Sentry disabled — no telemetry
 
 if (
   import.meta.env.VITE_POSTHOG_API_KEY &&
@@ -81,7 +60,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <PostHogProvider client={posthog}>
         <Sentry.ErrorBoundary
           fallback={<p>{i18n.t('common:states.error')}</p>}
-          showDialog
         >
           <ClickToComponent />
           <App />
