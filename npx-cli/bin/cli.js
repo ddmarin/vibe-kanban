@@ -16,6 +16,7 @@ function getEffectiveArch() {
 
   if (platform === "darwin") {
     // If Node itself is arm64, we're natively on Apple silicon
+    console.log("nodeArch", nodeArch)
     if (nodeArch === "arm64") return "arm64";
 
     // Otherwise check for Rosetta translation

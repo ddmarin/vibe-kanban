@@ -4,7 +4,11 @@ set -e  # Exit on any error
 
 # Detect OS and architecture
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-ARCH=$(uname -m)
+if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+  ARCH="arm64"
+else
+  ARCH=$(uname -m)
+fi
 
 # Map architecture names
 case "$ARCH" in
@@ -42,19 +46,24 @@ fi
 echo "🔍 Detected platform: $PLATFORM"
 echo "🔧 Using target directory: $CARGO_TARGET_DIR"
 
-# Set API base URL for remote features
-export VK_SHARED_API_BASE="https://api.vibekanban.com"
-export VITE_VK_SHARED_API_BASE="https://api.vibekanban.com"
+# Disable remote features for local build
+unset VK_SHARED_API_BASE
+unset VITE_VK_SHARED_API_BASE
 
 echo "🧹 Cleaning previous builds..."
 rm -rf npx-cli/dist
 mkdir -p npx-cli/dist/$PLATFORM
 
-echo "🔨 Building frontend..."
-(cd frontend && npm run build)
+echo "🔨 [1/4] Type-checking frontend (tsc)..."
+(cd frontend && npx tsc --diagnostics)
 
-echo "🔨 Building Rust binaries..."
+echo "🔨 [2/4] Bundling frontend (vite)..."
+(cd frontend && npx vite build)
+
+echo "🔨 [3/4] Building Rust server + review binaries..."
 cargo build --release --manifest-path Cargo.toml
+
+echo "🔨 [4/4] Building Rust MCP binary..."
 cargo build --release --bin mcp_task_server --manifest-path Cargo.toml
 
 echo "📦 Creating distribution package..."

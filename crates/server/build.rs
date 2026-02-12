@@ -13,6 +13,9 @@ fn main() {
         println!("cargo:rustc-env=VK_SHARED_API_BASE={}", vk_shared_api_base);
     }
 
+    // Re-embed frontend assets whenever they change
+    println!("cargo:rerun-if-changed=../../frontend/dist");
+
     // Create frontend/dist directory if it doesn't exist
     let dist_path = Path::new("../../frontend/dist");
     if !dist_path.exists() {
