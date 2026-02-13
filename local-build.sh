@@ -4,7 +4,11 @@ set -e  # Exit on any error
 
 # Detect OS and architecture
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-ARCH=$(uname -m)
+if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ]; then
+  ARCH="arm64"
+else
+  ARCH=$(uname -m)
+fi
 
 # Map architecture names
 case "$ARCH" in
